@@ -1,10 +1,10 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'screens/game_screen.dart';
-import 'screens/stats_screen.dart';
-import 'screens/settings_screen.dart';
-import 'screens/howto_screen.dart';
+import 'screens/home_screen.dart' show HomeScreen;
+import 'screens/game_screen.dart' show GameScreen;
+import 'screens/stats_screen.dart' show StatsScreen;
+import 'screens/settings_screen.dart' show SettingsScreen;
+import 'screens/howto_screen.dart' show HowToScreen;
 
 void main() {
   runApp(const App());
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0, backgroundColor: Colors.transparent),
       ),
       home: const HomeScreen(),
-      routes: {
+      routes: <String, WidgetBuilder>{
         '/game': (_) => const GameScreen(),
         '/stats': (_) => const StatsScreen(),
         '/settings': (_) => const SettingsScreen(),

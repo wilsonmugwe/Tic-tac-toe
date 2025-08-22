@@ -2,11 +2,31 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController _spin;
+
+  @override
+  void initState() {
+    super.initState();
+    _spin = AnimationController(vsync: this, duration: const Duration(seconds: 16))..repeat();
+  }
+
+  @override
+  void dispose() {
+    _spin.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -17,89 +37,94 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFFDAD2FF),
-                  Color(0xFFBFD1FF),
-                  Color(0xFFF0E9FF),
-                ],
-              ),
-            ),
-          ),
+          const _BackgroundGradient(),
           Positioned.fill(child: CustomPaint(painter: _XOPatternPainter())),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 560),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: _TicTacCard(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.grid_3x3, size: 88, color: Color(0xFF4B2E83)),
-                        const SizedBox(height: 18),
-                        const Text(
-                          'Noughts & Crosses',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.2,
-                            color: Colors.black,
+          SafeArea(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: _Card(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: AnimatedBuilder(
+                              animation: _spin,
+                              builder: (context, _) {
+                                final angle = (_spin.value * 2 * math.pi) * 0.05;
+                                return Transform.rotate(
+                                  angle: angle,
+                                  child: const _LogoXO(),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Play Tic Tac Toe vs AI with undo and persistent stats.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
+                          const SizedBox(height: 18),
+                          const Text(
+                            'Noughts & Crosses',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.2,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 28),
-                        _MenuButton(
-                          icon: Icons.play_arrow_rounded,
-                          label: 'Play',
-                          onPressed: () => Navigator.pushNamed(context, '/game'),
-                          backgroundColor: const Color(0xFF4B2E83),
-                          foregroundColor: Colors.white,
-                          shadowColor: const Color(0x80321E5C),
-                        ),
-                        const SizedBox(height: 14),
-                        _MenuButton(
-                          icon: Icons.bar_chart,
-                          label: 'Stats',
-                          onPressed: () => Navigator.pushNamed(context, '/stats'),
-                          backgroundColor: const Color(0xFF3E345F),
-                          foregroundColor: Colors.white,
-                          shadowColor: const Color(0x802A2342),
-                        ),
-                        const SizedBox(height: 14),
-                        _MenuButton(
-                          icon: Icons.settings,
-                          label: 'Settings',
-                          onPressed: () => Navigator.pushNamed(context, '/settings'),
-                          backgroundColor: const Color(0xFF3E345F),
-                          foregroundColor: Colors.white,
-                          shadowColor: const Color(0x802A2342),
-                        ),
-                        const SizedBox(height: 10),
-                        TextButton(
-                          onPressed: () => Navigator.pushNamed(context, '/howto'),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.black87,
-                            textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Play Tic Tac Toe vs AI with undo and persistent stats.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18, color: Colors.black87),
                           ),
-                          child: const Text('How to Play'),
-                        ),
-                      ],
+                          const SizedBox(height: 28),
+                          _MenuButton(
+                            icon: Icons.play_arrow_rounded,
+                            label: 'Play',
+                            onPressed: () => Navigator.pushNamed(context, '/game'),
+                            backgroundColor: const Color(0xFF4B2E83),
+                            foregroundColor: Colors.white,
+                            shadowColor: const Color(0x80321E5C),
+                          ),
+                          const SizedBox(height: 14),
+                          _MenuButton(
+                            icon: Icons.bar_chart_rounded,
+                            label: 'Stats',
+                            onPressed: () => Navigator.pushNamed(context, '/stats'),
+                            backgroundColor: const Color(0xFF3E345F),
+                            foregroundColor: Colors.white,
+                            shadowColor: const Color(0x802A2342),
+                          ),
+                          const SizedBox(height: 14),
+                          _MenuButton(
+                            icon: Icons.settings_rounded,
+                            label: 'Settings',
+                            onPressed: () => Navigator.pushNamed(context, '/settings'),
+                            backgroundColor: const Color(0xFF3E345F),
+                            foregroundColor: Colors.white,
+                            shadowColor: const Color(0x802A2342),
+                          ),
+                          const SizedBox(height: 14),
+                          _MenuButton(
+                            icon: Icons.help_outline_rounded,
+                            label: 'How to Play',
+                            onPressed: () => Navigator.pushNamed(context, '/howto'),
+                            backgroundColor: const Color(0xFF3E345F),
+                            foregroundColor: Colors.white,
+                            shadowColor: const Color(0x802A2342),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'v1.0',
+                            style: TextStyle(fontSize: 12, color: scheme.onSurface.withOpacity(0.45)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -127,7 +152,6 @@ class _MenuButton extends StatelessWidget {
     required this.backgroundColor,
     required this.foregroundColor,
     this.shadowColor,
-    super.key,
   });
 
   @override
@@ -158,66 +182,83 @@ class _MenuButton extends StatelessWidget {
   }
 }
 
-class _TicTacCard extends StatelessWidget {
-  final Widget child;
-  const _TicTacCard({required this.child, super.key});
+class _LogoXO extends StatelessWidget {
+  const _LogoXO();
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: CustomPaint(
-        painter: _TicTacBorderPainter(),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.75),
-            boxShadow: const [
-              BoxShadow(color: Colors.black26, blurRadius: 24, offset: Offset(0, 12)),
-            ],
-          ),
-          child: child,
+    return CustomPaint(
+      painter: _LogoPainter(),
+      size: const Size.square(100),
+    );
+  }
+}
+
+class _LogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final oPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10
+      ..color = const Color(0xFF4B2E83);
+    final xPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10
+      ..color = const Color(0xFF7C4DFF);
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final r = size.width * 0.32;
+    canvas.drawCircle(center, r, oPaint);
+
+    final s = size.width * 0.55;
+    final half = s / 2;
+    final angle = math.pi / 8;
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(angle);
+    canvas.drawLine(Offset(-half, -half), Offset(half, half), xPaint);
+    canvas.drawLine(Offset(-half, half), Offset(half, -half), xPaint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _BackgroundGradient extends StatelessWidget {
+  const _BackgroundGradient();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFDAD2FF), Color(0xFFBFD1FF), Color(0xFFF0E9FF)],
         ),
       ),
     );
   }
 }
 
-class _TicTacBorderPainter extends CustomPainter {
+class _Card extends StatelessWidget {
+  final Widget child;
+  const _Card({required this.child});
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final outerRRect = RRect.fromRectAndRadius(
-      Offset.zero & size,
-      const Radius.circular(24),
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.75),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 24, offset: Offset(0, 12))],
+        ),
+        child: child,
+      ),
     );
-
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..color = const Color(0xFF5E4FB0).withOpacity(0.6);
-
-    canvas.drawRRect(outerRRect, borderPaint);
-
-    const inset = 14.0;
-    final rect = Rect.fromLTWH(inset, inset, size.width - inset * 2, size.height - inset * 2);
-
-    final gridPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6
-      ..color = const Color(0xFF5E4FB0).withOpacity(0.45);
-
-    final vx1 = rect.left + rect.width / 3;
-    final vx2 = rect.left + rect.width * 2 / 3;
-    canvas.drawLine(Offset(vx1, rect.top), Offset(vx1, rect.bottom), gridPaint);
-    canvas.drawLine(Offset(vx2, rect.top), Offset(vx2, rect.bottom), gridPaint);
-
-    final hy1 = rect.top + rect.height / 3;
-    final hy2 = rect.top + rect.height * 2 / 3;
-    canvas.drawLine(Offset(rect.left, hy1), Offset(rect.right, hy1), gridPaint);
-    canvas.drawLine(Offset(rect.left, hy2), Offset(rect.right, hy2), gridPaint);
   }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _XOPatternPainter extends CustomPainter {
