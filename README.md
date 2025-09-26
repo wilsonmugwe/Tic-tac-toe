@@ -30,34 +30,31 @@ lib/
     ├── game_screen.dart       # Main 3×3 board and gameplay
     └── howto_screen.dart      # Game instructions
 
-
 ---
 
 ## Dependencies
 
 Key packages used in this project:
 
-shared_preferences – persistent score storage
+- `shared_preferences` – persistent score storage
+- `provider` – state management
+- `intl` – formatting utilities
+- `cupertino_icons` – iOS-style icons
+- `flutter_lints` – linting rules for code quality
+- `flutter_test` – unit and widget testing
 
-provider – state management
-
-intl – formatting utilities
-
-cupertino_icons – iOS-style icons
-
-flutter_lints – linting rules for code quality
-
-flutter_test – unit and widget testing
-
-See pubspec.yaml for exact versions.
+See [`pubspec.yaml`](pubspec.yaml) for exact versions.
 
 ---
 
 ## Getting Started
 
 1. Clone this repository:
-git clone https://github.com/wilsonmugwe/tictactoe.git
-cd tictactoe
+   ```bash
+   git clone https://github.com/wilsonmugwe/tictactoe.git
+   cd tictactoe
+
+
 
 2. Install dependencies:
 flutter pub get
