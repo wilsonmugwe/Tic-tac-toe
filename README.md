@@ -91,10 +91,10 @@ AI behaviour (Easy, Medium, Hard)
 
 Run all tests with:
 
-    ```
+    
     flutter test
 
-    ```
+    
 
 
 ---
