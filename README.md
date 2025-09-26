@@ -30,10 +30,13 @@ lib/
     ├── game_screen.dart       # Main 3×3 board and gameplay
     └── howto_screen.dart      # Game instructions
 
+
+```
 ---
 
 ## Dependencies
 
+```
 Key packages used in this project:
 
 - `shared_preferences` – persistent score storage
@@ -45,22 +48,32 @@ Key packages used in this project:
 
 See [`pubspec.yaml`](pubspec.yaml) for exact versions.
 
+```
 ---
 
 ## Getting Started
 
+
 1. Clone this repository:
-   ```bash
+   ```
    git clone https://github.com/wilsonmugwe/tictactoe.git
    cd tictactoe
+
+   ```
 
 
 
 2. Install dependencies:
-flutter pub get
+    ```
+    flutter pub get
+
+    ```
 
 3. Run the app:
-flutter run
+    ```
+    flutter run
+
+    ```
 
 ---
 
@@ -77,7 +90,10 @@ Undo functionality
 AI behaviour (Easy, Medium, Hard)
 
 Run all tests with:
-flutter test
+    ```
+    flutter test
+
+    ```
 
 
 ---
